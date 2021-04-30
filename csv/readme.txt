@@ -1,8 +1,7 @@
 I followed this schematic for the relationship between tables and meaning of variables:
 https://meta.stackexchange.com/questions/2677/database-schema-documentation-for-the-public-data-dump-and-sede
 
-SETUP:
-
+SETUP: Put the original CSV files from https://drive.google.com/file/d/16QZ33cGlGTlg7rzC_N9AnF0FG3oUkDuG/view?usp=sharing in this folder if you will run locally.
 on psql shell:
 
 CREATE DATABASE se_datadump;
@@ -36,3 +35,5 @@ To export the latter query to CSV:
 
 To export the latter query to CSV:
 \copy (SELECT posts.owneruserid AS wikipost_authorid, COUNT(tags.tagname) AS wikipost_topic_count FROM posts INNER JOIN tags ON (posts.id=tags.wikipostid) GROUP BY wikipost_authorid ORDER BY wikipost_authorid) To 'C:/Users/Public/csv/wiki_topic_counts.csv' With CSV HEADER
+
+The resulting CSV files are used for analysis as shown in the JuPyter notebook.
