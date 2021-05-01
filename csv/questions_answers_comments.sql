@@ -1,4 +1,4 @@
-SELECT qa_counts.userid, ROUND((ques_count+1)/(ans_count + comment_count)+2, 1) AS ques_to_reply_ratio FROM
+SELECT qa_counts.userid, ques_count, ans_count, comment_count FROM
 (
 SELECT userid, ques_count, ans_count FROM
 	(SELECT posts.owneruserid AS userid, COUNT(posts.id) AS ques_count 
