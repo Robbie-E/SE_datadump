@@ -6,7 +6,7 @@ https://meta.stackexchange.com/questions/2677/database-schema-documentation-for-
 
 A) SETUP: Include the original CSV files from https://drive.google.com/file/d/16QZ33cGlGTlg7rzC_N9AnF0FG3oUkDuG/view?usp=sharing in this folder if you will run locally.
 
-  On psql shell:
+  On psql shell (:
   CREATE DATABASE se_datadump;
   \c se_datadump
   \i 'C:/Users/Public/csv/init.sql'
@@ -24,7 +24,12 @@ B) Run these queries:
   \i 'C:/Users/Public/csv/questions_answers_comments.sql'
 
   To export to CSV:
-  \copy (SELECT qa_counts.userid, ROUND((ques_count+1)/(ans_count + comment_count)+2, 2) AS ques_to_reply_ratio FROM (SELECT userid, ques_count, ans_count FROM (SELECT posts.owneruserid AS userid, COUNT(posts.id) AS ques_count FROM posts WHERE posts.posttypeid=1 AND posts.owneruserid IS NOT NULL GROUP BY posts.owneruserid)question INNER JOIN (SELECT posts.owneruserid AS userid, COUNT(posts.id) AS ans_count FROM posts WHERE posts.posttypeid=2 AND posts.owneruserid IS NOT NULL GROUP BY posts.owneruserid)answer USING (userid))qa_counts INNER JOIN (SELECT comments.userid, COUNT(comments.id) AS comment_count FROM comments GROUP BY comments.userid HAVING comments.userid IS NOT NULL)cmt_counts ON (qa_counts.userid=cmt_counts.userid) ORDER BY userid) To 'C:/Users/Public/csv/questions_answers_comments.csv' With CSV HEADER
+  \copy (SELECT qa_counts.userid, ques_count, ans_count, comment_count FROM (SELECT userid, ques_count, ans_count FROM (SELECT posts.owneruserid AS userid, COUNT(posts.id) AS ques_count FROM posts WHERE posts.posttypeid=1 AND posts.owneruserid IS NOT NULL GROUP BY posts.owneruserid)question INNER JOIN (SELECT posts.owneruserid AS userid, COUNT(posts.id) AS ans_count FROM posts WHERE posts.posttypeid=2 AND posts.owneruserid IS NOT NULL GROUP BY posts.owneruserid)answer USING (userid))qa_counts INNER JOIN (SELECT comments.userid, COUNT(comments.id) AS comment_count FROM comments GROUP BY comments.userid HAVING comments.userid IS NOT NULL)cmt_counts ON (qa_counts.userid=cmt_counts.userid) ORDER BY userid) To 'C:/Users/Public/csv/questions_answers_comments.csv' With CSV HEADER
+  
+  \i 'C:/Users/Public/csv/questions_answers.sql'
+
+  To export to CSV:
+  \copy (SELECT qa_counts.userid, ques_count, ans_count FROM (SELECT userid, ques_count, ans_count FROM (SELECT posts.owneruserid AS userid, COUNT(posts.id) AS ques_count FROM posts WHERE posts.posttypeid=1 AND posts.owneruserid IS NOT NULL GROUP BY posts.owneruserid)question INNER JOIN (SELECT posts.owneruserid AS userid, COUNT(posts.id) AS ans_count FROM posts WHERE posts.posttypeid=2 AND posts.owneruserid IS NOT NULL GROUP BY posts.owneruserid)answer USING (userid))qa_counts) To 'C:/Users/Public/csv/questions_answers.csv' With CSV HEADER
 
   3) Topics posted by users:
   \i 'C:/Users/Public/csv/user_excerptpost_topics.sql'
